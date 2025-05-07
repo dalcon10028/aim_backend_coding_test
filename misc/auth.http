@@ -1,0 +1,14 @@
+### SignUp
+POST {{host}}/auth/signup
+Content-Type: application/json
+
+{
+  "username": "user",
+  "password": "passwd"
+}
+
+### SignIn (Form)
+POST {{host}}/login
+Content-Type: application/x-www-form-urlencoded
+
+username=user&password=passwd
