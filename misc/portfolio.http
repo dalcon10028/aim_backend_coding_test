@@ -1,0 +1,14 @@
+### SignIn (Form)
+POST {{host}}/login
+Content-Type: application/x-www-form-urlencoded
+
+username = {{username}} &
+password = {{password}}
+
+### Select User Portfolio Risk Type
+POST {{host}}/portfolio/user/risk
+Content-Type: application/json
+
+{
+  "riskType": "FULL_BALANCE"
+}
