@@ -1,0 +1,15 @@
+### SignIn (Form)
+POST {{host}}/login
+Content-Type: application/x-www-form-urlencoded
+
+username={{username}}&password={{password}}
+
+### Create a new security
+POST {{host}}/securities
+Content-Type: application/json
+
+{
+  "name": "기아",
+  "ticker": "000270",
+  "price": 87800
+}
