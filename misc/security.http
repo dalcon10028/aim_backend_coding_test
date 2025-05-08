@@ -21,3 +21,6 @@ Content-Type: application/json
 {
   "price": 88000
 }
+
+### Delete a security
+DELETE {{host}}/securities/000270

@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import co.getaim.security.dto.*
 import co.getaim.security.repository.*
+import java.time.LocalDateTime
 
 @Service
 class SecurityService(
@@ -11,7 +12,7 @@ class SecurityService(
 ) {
     @Transactional
     suspend fun create(create: SecurityCreate): SecurityResponse {
-        if (securityRepository.existsByTicker(create.ticker)) {
+        if (securityRepository.existsByTickerAndDeletedAtIsNull(create.ticker)) {
             throw IllegalArgumentException("Ticker already exists for: ${create.ticker}")
         }
 
@@ -21,8 +22,14 @@ class SecurityService(
 
     @Transactional
     suspend fun updatePrice(ticker: String, price: Int): SecurityResponse {
-        val security = securityRepository.findByTicker(ticker) ?: throw IllegalArgumentException("Security not found for: $ticker")
+        val security = securityRepository.findByTickerAndDeletedAtIsNull(ticker) ?: throw IllegalArgumentException("Security not found for: $ticker")
         return securityRepository.save(security.copy(price = price))
             .let { SecurityResponse.from(it) }
+    }
+
+    @Transactional
+    suspend fun delete(ticker: String) {
+        val security = securityRepository.findByTickerAndDeletedAtIsNull(ticker) ?: throw IllegalArgumentException("Security not found for: $ticker")
+        securityRepository.save(security.copy(deletedAt = LocalDateTime.now()))
     }
 }

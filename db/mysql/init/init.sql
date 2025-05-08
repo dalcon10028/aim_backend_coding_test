@@ -43,7 +43,7 @@ create table if not exists security
     deleted_at timestamp default null,
     updated_at timestamp default current_timestamp on update current_timestamp,
     created_at timestamp default current_timestamp,
-    unique key (ticker)
+    index idx_ticker (ticker)
 ) engine = InnoDB
   default charset = utf8mb4;
 
