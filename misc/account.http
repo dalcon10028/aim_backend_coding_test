@@ -1,0 +1,23 @@
+### SignIn (Form)
+POST {{host}}/login
+Content-Type: application/x-www-form-urlencoded
+
+username = {{username}} &
+password = {{password}}
+
+### Account
+GET {{host}}/accounts
+Content-Type: application/json
+
+> {%
+  const accounts = response.body;
+  client.global.set("accountId", accounts[0].accountId);
+%}
+
+### Deposit
+POST {{host}}/accounts/{{accountId}}/deposit
+Content-Type: application/json
+
+{
+  "amount": 1000
+}

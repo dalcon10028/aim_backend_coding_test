@@ -3,15 +3,15 @@ POST {{host}}/auth/signup
 Content-Type: application/json
 
 {
-  "username": "user",
-  "password": "passwd"
+  "username": "{{username}}",
+  "password": "{{password}}"
 }
 
 ### SignIn (Form)
 POST {{host}}/login
 Content-Type: application/x-www-form-urlencoded
 
-username=user&password=passwd
+username={{username}}&password={{password}}
 
 ### SignOut
 POST {{host}}/auth/signout

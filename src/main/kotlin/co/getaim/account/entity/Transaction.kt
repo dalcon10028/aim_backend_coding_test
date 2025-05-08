@@ -8,12 +8,12 @@ import java.time.LocalDateTime
 
 @Table("transaction")
 data class Transaction(
-    val id: Long,
+    val id: Long? = null,
     val accountId: Long,
     val type: TransactionType,
     val amount: Int,
     @CreatedDate
-    val createdAt: LocalDateTime,
+    val createdAt: LocalDateTime? = null,
 ) {
     init {
         require(amount > 0) { "Amount must be greater than zero." }

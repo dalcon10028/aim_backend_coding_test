@@ -1,6 +1,6 @@
 package co.getaim.auth
 
-import co.getaim.auth.model.AuthUser
+import co.getaim.auth.model.AuthUserDetails
 import co.getaim.user.UserService
 import kotlinx.coroutines.reactor.mono
 import org.springframework.stereotype.Service
@@ -15,5 +15,5 @@ class CustomUserDetailsService(
 ) : ReactiveUserDetailsService {
     override fun findByUsername(username: String): Mono<UserDetails?>? =
         mono { userService.getUser(username) ?: throw UsernameNotFoundException("User not found: $username") }
-            .map { user -> AuthUser.from(user) }
+            .map { user -> AuthUserDetails.from(user) }
 }
