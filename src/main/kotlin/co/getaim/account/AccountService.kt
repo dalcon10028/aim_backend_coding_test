@@ -2,6 +2,7 @@ package co.getaim.account
 
 import co.getaim.account.dto.AccountResponse
 import co.getaim.account.dto.DepositResponse
+import co.getaim.account.dto.WithdrawResponse
 import co.getaim.account.entity.Account
 import co.getaim.account.entity.Transaction
 import co.getaim.account.enums.TransactionType.*
@@ -53,6 +54,33 @@ class AccountService(
             accountId = accountId,
             amount = amount,
             balance = transactionRepository.findByAccountId(accountId).sumOf { it.delta }
+        )
+    }
+
+    @Transactional
+    suspend fun withdraw(userId: Long, accountId: Long, amount: Int): WithdrawResponse {
+        if (accountRepository.existsByIdAndUserId(accountId, userId).not()) {
+            throw IllegalArgumentException("Account is not found, accountId: $accountId, userId: $userId")
+        }
+
+        val balance = transactionRepository.findByAccountId(accountId).sumOf { it.delta }
+
+        if (balance < amount) {
+            throw IllegalArgumentException("Insufficient balance, accountId: $accountId, balance: $balance, withdrawAmount: $amount")
+        }
+
+        transactionRepository.save(
+            Transaction(
+                accountId = accountId,
+                amount = -amount,
+                type = WITHDRAW
+            )
+        )
+
+        return WithdrawResponse(
+            accountId = accountId,
+            amount = amount,
+            balance = balance - amount
         )
     }
 }
