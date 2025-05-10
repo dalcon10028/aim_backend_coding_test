@@ -16,24 +16,22 @@ class AccountService(
     private val transactionRepository: TransactionRepository,
 ) {
 
-    suspend fun createAccount(userId: Long, riskType: RiskType): AccountResponse {
-        val account = accountRepository.save(Account(userId = userId, riskType = riskType))
-        return AccountResponse(
-            accountId = account.id!!,
-            userId = account.userId,
-        )
-    }
+    suspend fun createAccount(userId: Long, riskType: RiskType): AccountResponse =
+        accountRepository.save(Account(userId = userId, riskType = riskType)).let {
+            AccountResponse.from(it)
+        }
 
     @Transactional(readOnly = true)
     suspend fun getAccounts(userId: Long): List<AccountResponse> {
         val accounts = accountRepository.findByUserId(userId)
-        return accounts.map {
-            AccountResponse(
-                accountId = it.id!!,
-                userId = it.userId,
-            )
-        }
+        return accounts.map { AccountResponse.from(it) }
     }
+
+    @Transactional(readOnly = true)
+    suspend fun getAccount(accountId: Long): AccountResponse =
+        accountRepository.findById(accountId)?.let {
+            AccountResponse.from(it)
+        } ?: throw IllegalArgumentException("Account is not found, accountId: $accountId")
 
     @Transactional(readOnly = true)
     suspend fun getDeposit(accountId: Long): Int = transactionRepository.findDepositByAccountId(accountId)
