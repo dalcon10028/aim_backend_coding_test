@@ -1,32 +1,22 @@
 package co.getaim.portfolio
 
-import co.getaim.portfolio.dto.PortfolioUserRiskCreate
-import co.getaim.portfolio.dto.PortfolioUserRiskResponse
-import co.getaim.portfolio.entity.PortfolioUserRisk
-import co.getaim.portfolio.repository.PortfolioUserRiskRepository
+import co.getaim.portfolio.repository.ModelPortfolioRepository
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 class PortfolioService(
-    private val portfolioUserRiskRepository: PortfolioUserRiskRepository,
+    private val modelPortfolioRepository: ModelPortfolioRepository,
 ) {
 
-    /**
-     * 포트폴리오 위험도 선택
-     */
-    @Transactional
-    suspend fun createPortfolioUserRisk(userId: Long, create: PortfolioUserRiskCreate) {
-        if (portfolioUserRiskRepository.existsByUserId(userId)) {
-            throw IllegalArgumentException("User risk already exists for userId: $userId")
-        }
-
-        return portfolioUserRiskRepository.save(
-            PortfolioUserRisk(
-                userId = userId,
-                riskType = create.riskType,
-            )
-        ).let { PortfolioUserRiskResponse.from(it) }
-    }
-
+//    suspend fun getModelPortfolios(): List<ModelPortfolioResponse> {
+//        return modelPortfolioRepository.findAll().map { modelPortfolio ->
+//            ModelPortfolioResponse(
+//                id = modelPortfolio.id!!,
+//                name = modelPortfolio.name,
+//                riskType = modelPortfolio.riskType,
+//                description = modelPortfolio.description,
+//                assetAllocation = modelPortfolio.assetAllocation,
+//            )
+//        }
+//    }
 }

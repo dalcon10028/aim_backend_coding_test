@@ -5,6 +5,14 @@ Content-Type: application/x-www-form-urlencoded
 username = {{username}} &
 password = {{password}}
 
+### Create Account with Risk Type(FULL_BALANCE, HALF_BALANCE)
+POST {{host}}/accounts
+Content-Type: application/json
+
+{
+  "riskType": "FULL_BALANCE"
+}
+
 ### Account
 GET {{host}}/accounts
 Content-Type: application/json

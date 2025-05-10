@@ -16,8 +16,6 @@
 erDiagram
     USER ||--o{ ACCOUNT: owns
     ACCOUNT ||--o{ TRANSACTION: contains
-    USER ||--o| PORTFOLIO_USER_RISK: makes
-    PORTFOLIO_USER_RISK ||--o{ ACCOUNT: used_by
     ACCOUNT ||--|| MODEL_PORTFOLIO: has
     ACCOUNT ||--|{ POSITION: holds
     ACCOUNT ||--o{ ADVISORY_REQUEST: makes
@@ -29,8 +27,7 @@ erDiagram
 ```
 
 - ***User*** 는 여러 개의 ***Account*** 를 생성할 수 있습니다.
-- ***PortfolioUserRisk*** 를 생성한 유저만 ***Account*** 를 생성할 수 있습니다.
-- ***Account*** 생성시엔 ***PortfolioUserRisk*** 에 맞춰서 ***ModelPortfolio*** 가 자동으로 선택됩니다.
+- ***Account*** 생성시엔 RiskType 을 선택해야 합니다.
 - ***Advisory*** 요청시엔 ***Position*** 과 ***ModelPortfolio*** 를 참고하여 ***ActualPortfolio*** 를 생성합니다.
 - ***Position*** 은 ***Transaction*** 을 통해 생성됩니다.
 

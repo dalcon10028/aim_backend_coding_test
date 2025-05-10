@@ -1,24 +1,28 @@
 package co.getaim.account
 
-import co.getaim.account.dto.AccountResponse
-import co.getaim.account.dto.DepositResponse
-import co.getaim.account.dto.WithdrawResponse
 import co.getaim.account.entity.Account
 import co.getaim.account.entity.Transaction
-import co.getaim.account.enums.TransactionType.*
 import co.getaim.account.repository.AccountRepository
 import co.getaim.account.repository.TransactionRepository
+import co.getaim.portfolio.enums.RiskType
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import co.getaim.account.enums.TransactionType.*
+import co.getaim.account.dto.*
 
 @Service
 class AccountService(
     private val accountRepository: AccountRepository,
     private val transactionRepository: TransactionRepository,
 ) {
-    suspend fun createAccount(userId: Long): Account {
-        val account = Account(userId = userId)
-        return accountRepository.save(account)
+
+    suspend fun createAccount(userId: Long, riskType: RiskType): AccountResponse {
+        val account = accountRepository.save(Account(userId = userId, riskType = riskType))
+        return AccountResponse(
+            accountId = account.id!!,
+            userId = account.userId,
+            balance = 0,
+        )
     }
 
     @Transactional(readOnly = true)

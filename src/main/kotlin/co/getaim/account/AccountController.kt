@@ -15,6 +15,12 @@ class AccountController(
         @AuthUser user: AuthUserDetails,
     ) = accountService.getAccounts(user.userId!!)
 
+    @PostMapping("/accounts")
+    suspend fun createAccount(
+        @AuthUser user: AuthUserDetails,
+        @Valid @RequestBody createAccountRequest: CreateAccountRequest,
+    ) = accountService.createAccount(user.userId!!, createAccountRequest.riskType)
+
     @PostMapping("/accounts/{accountId:[0-9]+}/deposit")
     suspend fun deposit(
         @AuthUser user: AuthUserDetails,

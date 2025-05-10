@@ -1,7 +1,7 @@
-package co.getaim.portfolio.dto
+package co.getaim.account.dto
 
 import co.getaim.portfolio.enums.RiskType
 
-data class PortfolioUserRiskCreate(
+data class CreateAccountRequest(
     val riskType: RiskType,
 )

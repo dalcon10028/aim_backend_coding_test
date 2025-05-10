@@ -19,7 +19,8 @@ create table if not exists login_history
 create table if not exists account
 (
     id         bigint auto_increment primary key,
-    user_id    bigint not null,
+    user_id    bigint       not null,
+    risk_type  varchar(255) not null comment 'FULL_BALANCE, HALF_BALANCE',
     created_at timestamp default current_timestamp
 ) engine = InnoDB
   default charset = utf8mb4;
@@ -89,12 +90,3 @@ values ('삼성전자', '005930', 54600),
        ('KB금융', '105560', 94500),
        ('삼성전자우', '005935', 45100),
        ('셀트리온', '068270', 159400);
-
-create table if not exists portfolio_user_risk
-(
-    id         bigint auto_increment primary key,
-    user_id    bigint       not null,
-    risk_type  varchar(255) not null comment 'FULL_BALANCE, HALF_BALANCE',
-    created_at timestamp default current_timestamp
-) engine = InnoDB
-  default charset = utf8mb4;
