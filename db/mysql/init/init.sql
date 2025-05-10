@@ -31,6 +31,7 @@ create table if not exists transaction
     account_id bigint       not null,
     type       varchar(255) not null comment 'DEPOSIT, WITHDRAW',
     amount     bigint       not null,
+    delta      bigint       not null,
     created_at timestamp default current_timestamp
 ) engine = InnoDB
   default charset = utf8mb4;

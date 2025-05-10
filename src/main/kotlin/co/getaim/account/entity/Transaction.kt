@@ -12,16 +12,11 @@ data class Transaction(
     val accountId: Long,
     val type: TransactionType,
     val amount: Int,
+    val delta: Int,
     @CreatedDate
     val createdAt: LocalDateTime? = null,
 ) {
     init {
         require(amount > 0) { "Amount must be greater than zero." }
     }
-
-    val delta: Int
-        get() = when (type) {
-            DEPOSIT -> amount
-            WITHDRAW -> -amount
-        }
 }

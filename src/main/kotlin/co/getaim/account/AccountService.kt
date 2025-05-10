@@ -21,24 +21,22 @@ class AccountService(
         return AccountResponse(
             accountId = account.id!!,
             userId = account.userId,
-            balance = 0,
         )
     }
 
     @Transactional(readOnly = true)
     suspend fun getAccounts(userId: Long): List<AccountResponse> {
         val accounts = accountRepository.findByUserId(userId)
-        val balanceMap = transactionRepository.findByAccountIdIn(accounts.map { it.id!! })
-            .groupBy { it.accountId }
-            .mapValues { it.value.sumOf { transaction -> transaction.delta } }
         return accounts.map {
             AccountResponse(
                 accountId = it.id!!,
                 userId = it.userId,
-                balance = balanceMap[it.id] ?: 0,
             )
         }
     }
+
+    @Transactional(readOnly = true)
+    suspend fun getDeposit(accountId: Long): Int = transactionRepository.findDepositByAccountId(accountId)
 
     @Transactional
     suspend fun deposit(userId: Long, accountId: Long, amount: Int): DepositResponse {
@@ -50,6 +48,7 @@ class AccountService(
             Transaction(
                 accountId = accountId,
                 amount = amount,
+                delta = amount,
                 type = DEPOSIT
             )
         )
@@ -57,7 +56,7 @@ class AccountService(
         return DepositResponse(
             accountId = accountId,
             amount = amount,
-            balance = transactionRepository.findByAccountId(accountId).sumOf { it.delta }
+            deposit = getDeposit(accountId)
         )
     }
 
@@ -67,24 +66,25 @@ class AccountService(
             throw IllegalArgumentException("Account is not found, accountId: $accountId, userId: $userId")
         }
 
-        val balance = transactionRepository.findByAccountId(accountId).sumOf { it.delta }
+        val deposit = getDeposit(accountId)
 
-        if (balance < amount) {
-            throw IllegalArgumentException("Insufficient balance, accountId: $accountId, balance: $balance, withdrawAmount: $amount")
+        if (deposit < amount) {
+            throw IllegalArgumentException("Insufficient deposit, accountId: $accountId, deposit: $deposit, withdrawAmount: $amount")
         }
 
         transactionRepository.save(
             Transaction(
                 accountId = accountId,
                 amount = -amount,
-                type = WITHDRAW
+                delta = -amount,
+                type = WITHDRAW,
             )
         )
 
         return WithdrawResponse(
             accountId = accountId,
             amount = amount,
-            balance = balance - amount
+            deposit = deposit - amount
         )
     }
 }
