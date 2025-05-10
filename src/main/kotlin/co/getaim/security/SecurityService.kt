@@ -32,4 +32,9 @@ class SecurityService(
         val security = securityRepository.findByTickerAndDeletedAtIsNull(ticker) ?: throw IllegalArgumentException("Security not found for: $ticker")
         securityRepository.save(security.copy(deletedAt = LocalDateTime.now()))
     }
+
+    @Transactional(readOnly = true)
+    suspend fun getSecurityMap(tickers: List<String>): Map<String, SecurityResponse> =
+        securityRepository.findByTickerInAndDeletedAtIsNull(tickers)
+            .associate { it.ticker to SecurityResponse.from(it) }
 }

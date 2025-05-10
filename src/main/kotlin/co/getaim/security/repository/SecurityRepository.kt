@@ -7,4 +7,6 @@ interface SecurityRepository : CoroutineCrudRepository<Security, Long> {
     suspend fun existsByTickerAndDeletedAtIsNull(ticker: String): Boolean
 
     suspend fun findByTickerAndDeletedAtIsNull(ticker: String): Security?
+
+    suspend fun findByTickerInAndDeletedAtIsNull(ticker: List<String>): List<Security>
 }
