@@ -28,13 +28,11 @@ class AccountServiceTest(
 
     test("잔액 부족 출금시 예외 발생") {
         coEvery { accountRepository.existsByIdAndUserId(accountId = 2L, userId = 1L) } returns true
-        coEvery { transactionRepository.findByAccountId(2L) } returns listOf(
-            Transaction(accountId = 2L, amount = 50, delta = 50, type = DEPOSIT),
-        )
+        coEvery { transactionRepository.findDepositByAccountId(2L) } returns 50
 
         val ex = shouldThrow<IllegalArgumentException> {
             accountService.withdraw(userId = 1L, accountId = 2L, amount = 100)
         }
-        ex.message shouldBe "Insufficient balance, accountId: 2, balance: 50, withdrawAmount: 100"
+        ex.message shouldBe "Insufficient deposit, accountId: 2, deposit: 50, withdrawAmount: 100"
     }
 })
