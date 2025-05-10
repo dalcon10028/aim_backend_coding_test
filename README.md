@@ -1,12 +1,70 @@
 # [AIM] Backend Coding Test
 
+> Simple portfolio management system with advisory features.
+
+## Stack
+
+- Kotlin
+- Spring Boot
+- Spring Security
+- Spring Data R2DBC
+- MySQL
+
+## Project Structure
+
 ```mermaid
 erDiagram
-    USER ||--o{ ACCOUNT           : owns
-    ACCOUNT ||--o{ TRANSACTION     : contains
-    USER ||--o{ PORTFOLIO_REQUEST : makes
-    PORTFOLIO_REQUEST ||--|| PORTFOLIO : generates
-    PORTFOLIO ||--o{ POSITION      : holds
-    POSITION }|--|| SECURITY       : refers_to
-    SECURITY ||--o{ SECURITY_PRICE : has
+    USER ||--o{ ACCOUNT: owns
+    ACCOUNT ||--o{ TRANSACTION: contains
+    USER ||--o| PORTFOLIO_USER_RISK: makes
+    PORTFOLIO_USER_RISK ||--o{ ACCOUNT: used_by
+    ACCOUNT ||--|| MODEL_PORTFOLIO: has
+    ACCOUNT ||--|{ POSITION: holds
+    ACCOUNT ||--o{ ADVISORY_REQUEST: makes
+    ADVISORY_REQUEST ||--|| ACTUAL_PORTFOLIO: has
+    POSITION ||--|| SECURITY: refers_to
+    ACTUAL_PORTFOLIO ||--|| SECURITY: refers_to
+    MODEL_PORTFOLIO ||--|| SECURITY: refers_to
+    TRANSACTION ||--|| SECURITY: refers_to
 ```
+
+- ***User*** 는 여러 개의 ***Account*** 를 생성할 수 있습니다.
+- ***PortfolioUserRisk*** 를 생성한 유저만 ***Account*** 를 생성할 수 있습니다.
+- ***Account*** 생성시엔 ***PortfolioUserRisk*** 에 맞춰서 ***ModelPortfolio*** 가 자동으로 선택됩니다.
+- ***Advisory*** 요청시엔 ***Position*** 과 ***ModelPortfolio*** 를 참고하여 ***ActualPortfolio*** 를 생성합니다.
+- ***Position*** 은 ***Transaction*** 을 통해 생성됩니다.
+
+## Getting Started
+
+### Prerequisites
+
+- Java 21 or higher
+- Docker & Docker Compose
+
+### Running the Application
+
+1. Start the Database:
+   ```bash
+   docker-compose up -d
+   ```
+
+2. Build & Run the Application:
+   ```bash
+    ./gradlew clean bootRun
+    ```
+
+3. Execute Tests:
+   ```bash
+    ./gradlew test
+    ```
+
+## HTTP Request Collections (/misc/*.http)
+
+All HTTP endpoints are catalogued under the misc directory as .http files for easy exploration and local testing using IntelliJ HTTP Client or similar
+tools.
+
+### Using the HTTP files
+
+1. Open the .http files in IntelliJ or your preferred HTTP client.
+2. Ensure the environment is selected (`http-client.env.json`)
+3. Execute the requests to test the endpoints.
