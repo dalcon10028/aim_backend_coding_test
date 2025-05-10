@@ -1,7 +1,6 @@
 package co.getaim.account.entity
 
 import co.getaim.account.enums.TransactionType
-import co.getaim.account.enums.TransactionType.*
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.relational.core.mapping.Table
 import java.time.LocalDateTime

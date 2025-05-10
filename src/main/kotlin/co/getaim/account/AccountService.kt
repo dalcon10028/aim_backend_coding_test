@@ -73,7 +73,7 @@ class AccountService(
         transactionRepository.save(
             Transaction(
                 accountId = accountId,
-                amount = -amount,
+                amount = amount,
                 delta = -amount,
                 type = WITHDRAW,
             )
