@@ -17,10 +17,8 @@ erDiagram
     USER ||--o{ ACCOUNT: owns
     ACCOUNT ||--o{ TRANSACTION: contains
     ACCOUNT ||--|| MODEL_PORTFOLIO: has
-    ACCOUNT ||--|{ POSITION: holds
-    ACCOUNT ||--o{ ADVISORY_REQUEST: makes
-    ADVISORY_REQUEST ||--|| ACTUAL_PORTFOLIO: has
-    POSITION ||--|| SECURITY: refers_to
+    ACCOUNT ||--o{ ADVISORY: makes
+    ADVISORY ||--|| ACTUAL_PORTFOLIO: has
     ACTUAL_PORTFOLIO ||--|| SECURITY: refers_to
     MODEL_PORTFOLIO ||--|| SECURITY: refers_to
     TRANSACTION ||--|| SECURITY: refers_to
@@ -28,8 +26,7 @@ erDiagram
 
 - ***User*** 는 여러 개의 ***Account*** 를 생성할 수 있습니다.
 - ***Account*** 생성시엔 RiskType 을 선택해야 합니다.
-- ***Advisory*** 요청시엔 ***Position*** 과 ***ModelPortfolio*** 를 참고하여 ***ActualPortfolio*** 를 생성합니다.
-- ***Position*** 은 ***Transaction*** 을 통해 생성됩니다.
+- ***Advisory*** 요청시엔 ***Transaction(deposit)*** 과 ***ModelPortfolio*** 를 참고하여 ***ActualPortfolio*** 를 생성합니다.
 
 ## Getting Started
 
