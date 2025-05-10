@@ -30,6 +30,14 @@ create table if not exists account
 ) engine = InnoDB
   default charset = utf8mb4;
 
+create table if not exists advisory
+(
+    id         bigint auto_increment primary key,
+    account_id bigint not null,
+    created_at timestamp default current_timestamp
+) engine = InnoDB
+  default charset = utf8mb4;
+
 create table if not exists transaction
 (
     id         bigint auto_increment primary key,
@@ -115,6 +123,17 @@ create table if not exists model_portfolio
     created_at timestamp default current_timestamp
 ) engine = InnoDB
   default charset = utf8mb4;
+
+insert into model_portfolio (risk_type, ticker, weight)
+values ('FULL_BALANCE', '005930', 0.2),
+       ('FULL_BALANCE', '000660', 0.2),
+       ('FULL_BALANCE', '373220', 0.2),
+       ('FULL_BALANCE', '207940', 0.2),
+       ('FULL_BALANCE', '012450', 0.2),
+       ('HALF_BALANCE', '005930', 0.3),
+       ('HALF_BALANCE', '000660', 0.3),
+       ('HALF_BALANCE', '373220', 0.4);
+
 
 create table if not exists actual_portfolio
 (

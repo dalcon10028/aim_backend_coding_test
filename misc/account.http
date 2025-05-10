@@ -13,19 +13,30 @@ Content-Type: application/json
   "riskType": "FULL_BALANCE"
 }
 
+> {%
+  const account = response.body;
+  client.global.set("accountId", account.accountId);
+%}
+
 ### Account
 GET {{host}}/accounts
 Content-Type: application/json
-
-> {%
-  const accounts = response.body;
-  client.global.set("accountId", accounts[0].accountId);
-%}
 
 ### Deposit
 POST {{host}}/accounts/{{accountId}}/deposit
 Content-Type: application/json
 
 {
+  "amount": 100000000
+}
+
+### Withdraw
+POST {{host}}/accounts/{{accountId}}/withdraw
+Content-Type: application/json
+
+{
   "amount": 1000
 }
+
+### Advisory
+POST {{host}}/accounts/{{accountId}}/advisory
